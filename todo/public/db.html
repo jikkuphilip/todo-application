@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<style>
+table {
+    width:50%;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+}
+table tr:nth-child(odd) {
+  background-color: white;
+}
+table tr:nth-child(even) {
+  background-color:   #B8B8B8;
+}
+th{
+	background-color: black;
+	color: white;
+}
+table td:hover{
+background-color: #606060;
+}
+
+.img-circle{
+  border-radius: 50%;
+}
+
+
+  </style>
+
+<body>
+
+<div ng-app="myApp" ng-controller="Ctrl"> 
+Enter name: <input type="text" ng-model="name1"><br>
+<input type="button" ng-click="display1()" value="click">
+<center><table></center>
+	<tr>
+		<th>NAME</th>
+		<th>START TIME</th>
+		<th>END TIME</th>
+    <th>ID</th>
+    <th>STATUS</th>
+	</tr>
+  <tr ng-repeat="x in names">
+    <td><center>{{x.name}}</center></td>
+    <td><center>{{ x.starttime}}</center></td>
+     <td><center>{{ x.endtime}}</center></td>
+     <td><center>{{ x.id}}</center></td>
+     <td><center>{{x.status}}</center></td>
+  </tr>
+</table>
+
+
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('Ctrl', function($scope, $http) {
+    $http.get("http://localhost:3011/list")
+    .then(function (response) 
+    	{$scope.names = response.data;});
+});
+
+app.controller("Ctrl", function($scope) {
+    $scope.display1=function(){
+        alert($scope.name1);
+}});
+</script>
+
+</body>
+</html>

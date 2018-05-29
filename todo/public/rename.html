@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head >
+  <meta charset="UTF-8">
+  <title>Simple Bootstrap To-Do List Template</title>
+  
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  
+      <link rel="stylesheet" href="css/style.css">
+
+  
+</head>
+
+<body  ng-controller="Ctrl">
+
+  
+
+  
+    <div class="form-group">
+      <h1>To-Do <small>List</small></h1>
+    <form role="form">
+        <input type="text" class="form-control" placeholder="Your Task" name="task" ng-model="name1">
+    </form>
+    <button type="button" class="btn btn btn-primary" ng-click="display1()">Add</button>
+        </div>
+        <div></div>
+    <ul class="list-unstyled" id=todo ng-repeat="x in names">
+      <ul >{{x.id}} {{x.name}}<a href='#' class='close' aria-hidden='true' ng-click="delete(x.id)">&times;</a>
+       <input type="checkbox"  ng-change="update(x.id,x.status)" ng-model="x.status" {{x.starttime}}></ul>
+
+    </ul>
+
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('Ctrl', function($scope, $http) {
+    $http.get("http://localhost:3011/list")
+    .then(function (response) 
+      {$scope.names = response.data;});
+
+    $scope.display1=function()
+    {   
+        $scope.url="http://localhost:3011/insert?insert="+$scope.name1;
+        $http.get($scope.url)
+        .then(function(response2)
+        {
+          $http.get("http://localhost:3011/list")
+          .then(function(response1)
+        {   
+            
+            $scope.names=response1.data;
+        }
+        )
+      })
+}
+
+$scope.update=function(a,b)
+    {  
+      $scope.url="http://localhost:3011/update?update="+a+"&&update1="+b;
+        $http.get($scope.url)
+        .then(function(response2)
+        {
+          $http.get("http://localhost:3011/list")
+          .then(function(response1)
+        {   
+            
+            $scope.names=response1.data;
+        }
+        )
+      })
+}
+
+$scope.delete=function(a)
+    {  
+      $scope.url="http://localhost:3011/delete?delete="+a;
+        $http.get($scope.url)
+        .then(function(response2)
+        {
+          $http.get("http://localhost:3011/list")
+          .then(function(response1)
+        {   
+            
+            $scope.names=response1.data;
+        }
+        )
+      })
+}
+});
+
+</script>
+
+</body>
+
+</html>

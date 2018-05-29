@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head >
+ <title>Todo List</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <style>
+  table {
+    width:50%;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+}
+table tr:nth-child(odd) {
+  background-color: white;
+}
+table tr:nth-child(even) {
+  background-color:   #B8B8B8;
+}
+th{
+  background-color: black;
+  color: white;
+}
+table td:hover{
+background-color: #d8d8d8;
+}
+</style>
+</head>
+
+<body  ng-controller="Ctrl">
+
+  
+
+  
+<div class="container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>LIST</th>
+        <th>START TIME</th>
+        <th>END TIME</th>
+        <th>STATUS</th>
+        <th>DELETE</th>
+      </tr>
+    </thead>
+    <tbody ng-repeat="x in names">
+      <tr>
+        <td class="success">{{x.id}}</td>
+        <td class="danger">{{x.name}}</td>
+        <td class="info">{{x.starttime|date:"medium"}}</td>
+        <td class="warning">{{x.endtime|date:"medium"}}</td>
+        <td class="active"><div class="checkbox">
+      <label><input type="checkbox" value=""  ng-change="update(x.id,x.status)" ng-model="x.status"></label>
+    </div></td>
+    <td><button type="button" class="btn btn-danger" ng-click="delete(x.id)" img-src="Downloads/download.jpeg">Delete</button></td>
+      </tr>      
+    </tbody>
+  </table>
+</div>
+ <div class="form-group">
+      <label for="usr">Enter List:</label>
+      <input type="text" class="form-control" id="usr" ng-model="name1">
+    </div>
+
+<div class="container1">
+    <button type="button" class="btn btn-primary btn-block" ng-click="display1()">Add List</button>
+  </div>
+
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('Ctrl', function($scope, $http) {
+    $http.get("http://localhost:3011/list")
+    .then(function (response) 
+      {$scope.names = response.data;});
+
+    $scope.display1=function()
+    {   
+        $scope.url="http://localhost:3011/insert?insert="+$scope.name1;
+        $http.get($scope.url)
+        .then(function(response2)
+        {
+          $http.get("http://localhost:3011/list")
+          .then(function(response1)
+        {   
+            
+            $scope.names=response1.data;
+        }
+        )
+      })
+}
+
+$scope.update=function(a,b)
+    {  
+      $scope.url="http://localhost:3011/update?update="+a+"&&update1="+b;
+        $http.get($scope.url)
+        .then(function(response2)
+        {
+          $http.get("http://localhost:3011/list")
+          .then(function(response1)
+        {   
+            
+            $scope.names=response1.data;
+        }
+        )
+      })
+}
+
+$scope.delete=function(a)
+    {  
+      $scope.url="http://localhost:3011/delete?delete="+a;
+        $http.get($scope.url)
+        .then(function(response2)
+        {
+          $http.get("http://localhost:3011/list")
+          .then(function(response1)
+        {   
+            
+            $scope.names=response1.data;
+        }
+        )
+      })
+}
+});
+
+</script>
+
+</body>
+
+</html>
